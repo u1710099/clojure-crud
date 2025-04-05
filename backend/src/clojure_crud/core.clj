@@ -3,7 +3,6 @@
             [ring.middleware.json :as middleware]
             [clojure.data.json :as json]))
 
-
 ;; In-memory database
 (defonce db (atom {:items {1 {:id 1 :name "Sample" :value 5}}}))
 
