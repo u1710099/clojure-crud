@@ -1,17 +1,18 @@
-(ns clojure-crud.core
-  (:require [cljs-http.client :as http]
-            [reagent.dom :as rdom]))
+(ns clojure-crud.core)
 
-(defn api-test []
-      (http/get "http://localhost:3000/api"
-                {:with-credentials? false}
-                #(js/console.log "Success:" %)
-                #(js/console.error "Error:" %)))
+;; Debugging check
+(js/console.log "Core namespace loaded")
 
-(defn app []
-      [:div
-       [:h1 "Frontend"]
-       [:button {:on-click api-test} "Call Backend API"]])
+(defn render []
+      (let [app (js/document.getElementById "app")]
+           (set! (.-innerHTML app)
+                 "<h1 style='color: green'>It Works!</h1>
+                  <p>ClojureScript is running properly</p>")))
 
+;; Properly exported init function
 (defn ^:export init []
-      (rdom/render [app] (js/document.getElementById "app")))
+      (js/console.log "Init function executed")
+      (render))
+
+;; Call init immediately to test
+(init)
