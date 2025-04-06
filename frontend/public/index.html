@@ -1,21 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CRUD App</title>
+    <title>My ClojureScript App</title>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; }
-        .form { margin: 20px 0; padding: 20px; background: #f5f5f5; }
-        .items { margin: 20px 0; }
-        .item { padding: 10px; margin: 5px 0; border: 1px solid #ddd; }
-        .chart { display: flex; height: 300px; align-items: flex-end; }
-        .bar-container { margin: 0 10px; text-align: center; }
-        .bar { width: 50px; background: steelblue; transition: height 0.3s; }
-        .bar-label { margin-bottom: 5px; }
-        button { margin-left: 10px; cursor: pointer; }
+        #loading-message, #error-message {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #loading-message {
+            color: #333;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+        #error-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div id="app"></div>
-    <script src="cljs-out/dev-main.js"></script>
+<!-- Loading state (visible by default) -->
+<div id="loading-message">
+    <h2>Loading application...</h2>
+    <p>Please wait while we load your ClojureScript app.</p>
+    <div id="error-message"></div>
+</div>
+
+<!-- Target for React/Reagent mounting -->
+<div id="app" style="display:none;"></div>
+
+<!-- Load compiled ClojureScript -->
+<script src="/js/main.js"></script>
+
+<!-- Initialize the app with error handling -->
+<script>
+    try {
+        // Display loaded message right before init
+        document.getElementById('loading-message').innerHTML =
+            '<h2>Initializing application...</h2><p>Almost ready!</p>';
+
+        // Initialize the app
+        clojure_crud.core.init();
+
+        // Hide loading and show app when ready
+        setTimeout(function() {
+            document.getElementById('loading-message').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+        }, 500);
+
+    } catch (error) {
+        // Show error message if initialization fails
+        document.getElementById('loading-message').style.display = 'none';
+        var errorDiv = document.getElementById('error-message');
+        errorDiv.style.display = 'block';
+        errorDiv.innerHTML = [
+            '<h2>Application Error</h2>',
+            '<p>Failed to initialize the application:</p>',
+            '<pre>' + error.stack + '</pre>',
+            '<p>Check browser console for details.</p>'
+        ].join('');
+    }
+</script>
 </body>
 </html>
